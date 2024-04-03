@@ -1,0 +1,8 @@
+package: api
+output: api/api.go
+generate:
+  embedded-spec: true
+  models: true
+  chi-server: true
+compatibility:
+  apply-chi-middleware-first-to-last: true

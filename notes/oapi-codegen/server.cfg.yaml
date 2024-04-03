@@ -1,0 +1,9 @@
+package: main
+output: newapi/main.go
+output-options:
+  skip-prune: true
+generate:
+  embedded-spec: true
+  strict-server: true
+  models: true
+  chi-server: true # compatible with net/http

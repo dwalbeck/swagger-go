@@ -1,0 +1,11 @@
+go-openapi
+	spec		    openapi specification object model
+	runtime		    openapi runtime interfaces
+	swag		    goodie bag in use in the go-openapi projects
+	jsonreference	fork of gojsonreference with support for structs
+	errors		    openapi toolkit common errors
+	analysis	    openapi specification object model analyzer
+	validate	    openapi toolkit validation helpers
+	loads		    openapi specification object model
+	strfmt		    openapi toolkit common string formats
+	jsonpointer	    fork of gojsonpointer with support for structs

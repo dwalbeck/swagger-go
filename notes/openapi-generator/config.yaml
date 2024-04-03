@@ -1,0 +1,6 @@
+router: chi
+outputAsLibrary: false
+onlyInterfaces: false
+serverPort: 8000
+sourceFolder: go
+packageName: openapi

@@ -1,0 +1,363 @@
+openapi: 3.0.0
+info:
+  title: Order Uploader
+  description: Takes cleaned and validated order data records as input and enters the record into the database tables
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:8000
+    description: local running instance in Docker
+
+paths:
+  /:
+    post:
+      summary: Main end point for processing records
+      description: The default and main end point used for sending order data records to be added into the database
+      operationId: processUpload
+      requestBody:
+        description: Order record for ingestion
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Order'
+      responses:
+        "200":
+          $ref: '#/components/responses/SuccessResponse'
+        default:
+          $ref: '#/components/responses/DefaultResponse'
+
+components:
+  responses:
+    SuccessResponse:
+      description: Successfully processed as added order record
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GoResponse'
+
+    DefaultResponse:
+      description: Error or failed response
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/GoResponse'
+
+  schemas:
+    GoResponse:
+      type: object
+      properties:
+        message:
+          type: string
+          description: Short explanation of either the successful or failed processing of order record
+        outcome:
+          type: string
+          enum: [success, failed]
+          description: Indicator on the outcome of the submitted order record
+        non-fatal:
+          type: array
+          description: List of failures for non-required data blocks
+          items:
+            type: object
+            properties:
+              db_table_path:
+                type: string
+              error:
+                type: string
+
+    Order:
+      type: object
+      properties:
+        Ingestion_provider_id:
+          type: integer
+        Company_id:
+          type: integer
+        Order_uuid:
+          type: string
+          nullable: true
+          default: ""
+        Client_order_id:
+          type: integer
+        Crm_account_id:
+          type: integer
+        Order_status:
+          type: integer
+        Order_created:
+          type: string
+          format: date-time
+        Order_detail:
+          $ref: '#/components/schemas/Order_detail'
+        Order_billing:
+          $ref: '#/components/schemas/Order_billing'
+        Order_transaction:
+          $ref: '#/components/schemas/Order_transaction'
+        Order_product:
+          $ref: '#/components/schemas/Order_product'
+        Order_shipping:
+          $ref: '#/components/schemas/Order_shipping'
+        Order_note:
+          $ref: '#/components/schemas/Order_note'
+      required:
+        - Company_id
+        - Ingestion_provider_id
+
+    Order_detail:
+      type: object
+      properties:
+        Customer_id:
+          type: integer
+        Ancestor_id:
+          type: integer
+        Parent_id:
+          type: integer
+        Child_id:
+          type: integer
+          nullable: true
+        Crm_refunded:
+          type: boolean
+          default: false
+        Crm_blacklisted:
+          type: boolean
+          default: false
+        Crm_stopped_recurring:
+          type: boolean
+          default: false
+        Ip_address:
+          type: string
+          format: ipv4
+        Affiliate:
+          type: integer
+        Sub_affiliate:
+          type: string
+        Campaign_id:
+          type: integer
+        Click_id:
+          type: integer
+        Resolved:
+          type: boolean
+          default: false
+        On_hold_by:
+          type: string
+        On_hold_date:
+          type: string
+          format: date
+        Order_confirmed:
+          type: boolean
+          default: false
+        Order_confirmed_date:
+          type: string
+          format: date
+        Order_date:
+          type: string
+          format: date
+        Detail_created:
+          type: string
+          format: date-time
+        Detail_updated:
+          type: string
+          format: date-time
+        Order_contact_id:
+          $ref: '#/components/schemas/Contact'
+
+    Order_billing:
+      type: object
+      properties:
+        Mid:
+          type: string
+        Order_total:
+          type: number
+          format: double
+        Currency:
+          type: string
+        Usd_amount:
+          type: number
+          format: double
+        Sales_tax:
+          type: number
+          format: double
+        Sales_tax_amount:
+          type: number
+          format: double
+        Total_amount_refunded:
+          type: number
+          format: double
+        Billing_cycle:
+          type: integer
+        Recurring_date:
+          type: string
+          format: date
+        Retry_date:
+          type: string
+          format: date
+        Billing_address_id:
+          $ref: '#/components/schemas/Address'
+
+    Order_transaction:
+      type: object
+      properties:
+        Avs_response:
+          type: string
+        Cvv_response:
+          type: string
+        Processor_id:
+          type: string
+        Gateway_id:
+          type: integer
+        Transaction_id:
+          type: integer
+        Auth_id:
+          type: string
+        Pan_locked:
+          type: boolean
+          default: false
+        Preserve_gateway:
+          type: boolean
+          default: false
+        Is_recurring:
+          type: boolean
+          default: false
+        Is_chargeback:
+          type: boolean
+          default: false
+        Is_fraud:
+          type: boolean
+          default: false
+        Is_rma:
+          type: boolean
+          default: false
+        Rma_number:
+          type: string
+        Rma_reason:
+          type: string
+        Decline_reason:
+          type: string
+        Transaction_date:
+          type: string
+          format: date-time
+        Payment_id:
+          $ref: '#/components/schemas/Payment'
+
+    Order_product:
+      type: array
+      items:
+        type: object
+        properties:
+          Product_id:
+            type: integer
+          Product_quantity:
+            type: integer
+          Upsell_product_id:
+            type: integer
+          Upsell_product_quantity:
+            type: integer
+          Order_product_created:
+            type: string
+            format: date-time
+
+    Order_shipping:
+      type: object
+      properties:
+        Shipping_method_name:
+          type: string
+        Shipping_date:
+          type: string
+        Tracking_number:
+          type: string
+        Shipping_address_id:
+          $ref: '#/components/schemas/Address'
+
+    Order_note:
+      type: array
+      items:
+        type: object
+        properties:
+          Note_message:
+            type: string
+          Note_created:
+            type: string
+            format: date-time
+
+    Contact:
+      type: object
+      properties:
+        Contact_phone:
+          type: string
+        Contact_email:
+          type: string
+          format: email
+        Contact_address_id:
+          $ref: '#/components/schemas/Address'
+      required:
+        - Contact_phone
+        - Contact_email
+
+    Address:
+      type: object
+      required:
+        - Street_addr
+        - State
+        - Postcode
+        - Country
+      properties:
+        First_name:
+          type: string
+        Last_name:
+          type: string
+        Street_addr:
+          type: string
+        Street_addr_2:
+          type: string
+        City:
+          type: string
+        State:
+          type: string
+        Postcode:
+          type: string
+          maxLength: 10
+          minLength: 5
+        Country:
+          type: string
+          maxLength: 2
+          minLength: 2
+        Address_created:
+          type: string
+          format: date-time
+
+    Payment:
+      type: object
+      properties:
+        CC_type:
+          type: string
+          enum: [mastercard, visa, amex, discover]
+          default: visa
+        Cc_number:
+          type: string
+          maxLength: 6
+          minLength: 4
+        Cc_exp:
+          type: string
+          maxLength: 4
+          minLength: 4
+        Card_source:
+          type: string
+        Check_account:
+          type: string
+          maxLength: 6
+          minLength: 4
+        Check_routing:
+          type: string
+          maxLength: 4
+          minLength: 4
+        Check_ssn:
+          type: string
+          maxLength: 4
+          minLength: 4
+        Card_bin:
+          type: string
+        Card_bin_short:
+          type: string
+        Prepaid_match:
+          type: boolean
+          default: false
+
+

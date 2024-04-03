@@ -1,0 +1,119 @@
+
+Swagger Defined Formats
+
+
+
+type
+	array
+	boolean
+	integer
+	number
+	object
+	string	
+enum
+const
+
+----------------------------------------------------
+
+Discriminator Objects:
+	oneOf
+	allOf
+	anyOf
+
+not
+example
+
+
+Global Keywords:
+	readOnly		<bool>
+	writeOnly		<bool>
+	nullable		<bool>
+
+
+Numeric formats:
+	double
+	float
+	int32
+	int64
+Numeric keywords:
+	exclusiveMaximum	<int>
+	exclusiveMinimum	<int>
+	multipleOf
+	maximum			<int>
+	minimum			<int>
+
+String formats:
+	binary
+	byte
+	date-time	
+	date
+	duration
+	email
+	hostname
+	idn-hostname
+	idn-email
+	ipv4
+	ipv6
+	iri
+	iri-reference
+	password
+	time
+	uri
+	uri-reference
+	uuid
+String keywords:
+	maxLength		<int>
+	minLength		<int>
+	pattern			<regex>
+
+Array formats:
+	oneOf
+	
+Array keywords:
+	maxItems		<int>
+	minItems		<int>
+	uniqueItems		<boolean>
+	maxContains		<int>
+	minContains		<int>
+
+Object keywords
+	maxProperties		<int>
+	minProperties		<int>
+	required		<array>
+	dependentRequired	
+
+
+
+paths operations:
+	get, post, put, patch, delete, head, options, and trace
+
+parameter types:
+	* path parameters, such as /users/{id}
+	* query parameters, such as /users?role=admin
+	* header parameters, such as X-MyHeader: Value
+	* cookie parameters, which are passed in the Cookie header, such as Cookie: debug=0; csrftoken=BUSe35dohU3O1MZvDCU
+
+parameter style / explode:
+style		type				in		Comments
+matrix		primitive, array, object	path		Path-style parameters defined by [RFC6570]
+label		primitive, array, object	path		Label style parameters defined by [RFC6570]
+form		primitive, array, object	query, cookie	Form style parameters defined by [RFC6570]. This option replaces collectionFormat with a csv (when explode is false) or multi (when explode is true) value from OpenAPI 2.0.
+simple		array				path, header	Simple style parameters defined by [RFC6570]. This option replaces collectionFormat with a csv value from OpenAPI 2.0.
+spaceDelimited	array, object			query		Space separated array or object values. This option replaces collectionFormat equal to ssv from OpenAPI 2.0.
+pipeDelimited	array, object			query		Pipe separated array or object values. This option replaces collectionFormat equal to pipes from OpenAPI 2.0.
+deepObject	object				query		Provides a simple way of rendering nested objects using form parameters.
+
+style 		explode	empty	string		array					object
+matrix		false	;color	;color=blue	;color=blue,black,brown			;color=R,100,G,200,B,150
+matrix		true	;color	;color=blue	;color=blue;color=black;color=brown	;R=100;G=200;B=150
+label		false	.	.blue		.blue.black.brown			.R.100.G.200.B.150
+label		true	.	.blue		.blue.black.brown			.R=100.G=200.B=150
+form		false	color=	color=blue	color=blue,black,brown			color=R,100,G,200,B,150
+form		true	color=	color=blue	color=blue&color=black&color=brown	R=100&G=200&B=150
+simple		false	n/a	blue		blue,black,brown			R,100,G,200,B,150
+simple		true	n/a	blue		blue,black,brown			R=100,G=200,B=150
+spaceDelimited	false	n/a	n/a		blue%20black%20brown			R%20100%20G%20200%20B%20150
+pipeDelimited	false	n/a	n/a		blue|black|brown			R|100|G|200|B|150
+deepObject	true	n/a	n/a		n/a					color[R]=100&color[G]=200&color[B]=150
+
+
