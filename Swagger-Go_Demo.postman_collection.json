@@ -1,0 +1,145 @@
+{
+	"info": {
+		"_postman_id": "67fb897b-22b2-4063-985f-25582dc81daa",
+		"name": "Swagger-Go Demo",
+		"description": "Demo of Swagger / OpenAPI 3.0 in a Golang implementation",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "229292"
+	},
+	"item": [
+		{
+			"name": "v1/foo",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pri_key\": 2345,\n    \"foo_color\": \"green\",\n    \"foo_us_state\": \"UT\",\n    \"foo_quantity\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/foo",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"foo"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "v1/foo/{foo_id}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pri_key\": 2345,\n    \"foo_color\": \"green\",\n    \"foo_us_state\": \"UT\",\n    \"foo_quantity\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/foo/5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"foo",
+						"5"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "v1/foo",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "*/*",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"pri_key\": 2345,\n    \"foo_color\": \"green\",\n    \"foo_us_state\": \"UT\",\n    \"foo_quantity\": 1\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/foo?search=something&limit=6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"foo"
+					],
+					"query": [
+						{
+							"key": "search",
+							"value": "something"
+						},
+						{
+							"key": "limit",
+							"value": "6"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

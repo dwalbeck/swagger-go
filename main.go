@@ -6,12 +6,12 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	midware "github.com/oapi-codegen/nethttp-middleware"
 	"log"
-	"main/api"
 	"net"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
+	"swagger-go/api"
 )
 
 func main() {

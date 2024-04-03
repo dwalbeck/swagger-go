@@ -1,0 +1,183 @@
+openapi: 3.0.3
+info:
+  title: Swagger 3.0 Demo
+  description: Very basic proof of concept API
+  version: 0.1.0
+servers:
+  - url: http://localhost:{port}/{basePath}
+    description: local running demo instance
+    variables:
+      port:
+        default: '8080'
+      basePath:
+        default: 'v1'
+paths:
+  /foo:
+    post:
+      summary: Fictitious service end-point
+      description: Spontaneous combustion at warp speed
+      operationId: fooNew
+      requestBody:
+        description: How to make a Foo
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Foo'
+      responses:
+        '200':
+          $ref: '#/components/responses/Success'
+        'default':
+          $ref: '#/components/responses/Error'
+
+    get:
+      summary: List of Foos
+      description: Retrieve a list of all Foos found
+      operationId: fooList
+      parameters:
+        - in: query
+          name: search
+          required: false
+          schema:
+            type: string
+            maxLength: 64
+            example: something
+          allowReserved: true
+          description: A search string to match against
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+            maximum: 32
+            minimum: 5
+          allowEmptyValue: true
+          description: Number of records to return
+          examples:
+            five:
+              value: 5
+              summary: A sample with minimum value set
+            mid:
+              value: 16
+              summary: A sample with the mid limit value
+      responses:
+        '200':
+          $ref: '#/components/responses/FooList'
+        'default':
+          $ref: '#/components/responses/Error'
+  /foo/{foo_id}:
+    get:
+      summary: Show a Foo
+      description: Retrieve a specified Foo
+      operationId: fooGet
+      parameters:
+        - in: path
+          name: foo_id
+          schema:
+            type: integer
+            format: int32
+          required: true
+          description: ID for the Foo wanted
+      responses:
+        '200':
+          description: A single Foo
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Foo'
+        'default':
+          $ref: '#/components/responses/Error'
+security:
+  - OAuth2:
+      - read
+      - write
+
+
+components:
+  responses:
+    Success:
+      description: Standard generic success response
+    Error:
+      description: Error response format on failure
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    FooList:
+      description: A list of Foos
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/Foo'
+          example: [
+            {
+              pri_key: 23454325,
+              foo_color: purple,
+              foo_us_state: UT,
+              foo_quantity: 3
+            },
+            {
+              pri_key: 53454325,
+              foo_color: green,
+              foo_us_state: AZ,
+              foo_quantity: 1
+            }
+          ]
+  schemas:
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code
+        message:
+          type: string
+          description: Error message
+    Foo:
+      type: object
+      properties:
+        pri_key:
+          type: integer
+          format: int32
+          description: Primary identifier
+        foo_color:
+          type: string
+          enum: ["purple","green","orange"]
+          default: "purple"
+        foo_us_state:
+          type: string
+          maxLength: 2
+          minLength: 2
+          description: The US state from which the Foo originated
+        foo_quantity:
+          type: integer
+          minimum: 1
+          maximum: 99
+          nullable: true
+          description: Total number of Foos
+      required:
+        - pri_key
+        - foo_us_state
+      example:
+        pri_key: 23454325
+        foo_color: purple
+        foo_us_state: UT
+        foo_quantity: 3
+
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://example.com/oauth/authorize
+          tokenUrl: https://example.com/oauth/token
+          scopes:
+            read: Grants read access
+            write: Grants write access
+            admin: Grants access to admin operations
